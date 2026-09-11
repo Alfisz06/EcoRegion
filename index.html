@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>EcoRegión - Gestión Ambiental</title>
+
+
+<!-- LIBRERÍA PARA GENERAR ARCHIVOS EXCEL -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
+<style>
+
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+
+    body {
+        margin: 0;
+        background: #f2f7f3;
+        color: #333;
+    }
+
+
+    /* ===============================
+       ENCABEZADO
+    =============================== */
+
+    header {
+
+        background: #1f6b3b;
+
+        color: white;
+
+        padding: 35px;
+
+        text-align: center;
+
+    }
+
+
+    header h1 {
+
+        margin: 0;
+
+        font-size: 35px;
+
+    }
+
+
+    header p {
+
+        font-size: 17px;
+
+    }
+
+
+    /* ===============================
+       CONTENEDOR PRINCIPAL
+    =============================== */
+
+    .contenedor {
+
+        width: 90%;
+
+        max-width: 1100px;
+
+        margin: 30px auto;
+
+    }
+
+
+    /* ===============================
+       TARJETAS
+    =============================== */
+
+    .tarjeta {
+
+        background: white;
+
+        padding: 30px;
+
+        margin-bottom: 25px;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 4px 12px
+            rgba(0,0,0,0.10);
+
+    }
+
+
+    h2 {
+
+        color: #1f6b3b;
+
+        margin-top: 0;
+
+    }
+
+
+    h3 {
+
+        color: #246b3c;
+
+    }
+
+
+    p {
+
+        line-height: 1.7;
+
+    }
+
+
+    /* ===============================
+       CAJAS DE INFORMACIÓN
+    =============================== */
+
+    .problema {
+
+        border-left:
+
+            5px solid #d35400;
+
+        background: #fff8f2;
+
+        padding: 20px;
+
+        margin-top: 15px;
+
+    }
+
+
+    .solucion {
+
+        border-left:
+
+            5px solid #1f6b3b;
+
+        background: #f1f9f3;
+
+        padding: 20px;
+
+        margin-top: 15px;
+
+    }
+
+
+    .lineamientos {
+
+        background: #eef6ef;
+
+        padding: 20px;
+
+        border-radius: 8px;
+
+        margin-top: 15px;
+
+    }
+
+
+    .lineamientos ul {
+
+        line-height: 1.8;
+
+    }
+
+
+    /* ===============================
+       FORMULARIO
+    =============================== */
+
+    .grupo {
+
+        margin-bottom: 18px;
+
+    }
+
+
+    label {
+
+        display: block;
+
+        margin-bottom: 7px;
+
+        font-weight: bold;
+
+    }
+
+
+    input,
+    select,
+    textarea {
+
+        width: 100%;
+
+        padding: 12px;
+
+        border: 1px solid #ccc;
+
+        border-radius: 6px;
+
+        font-size: 15px;
+
+    }
+
+
+    textarea {
+
+        min-height: 100px;
+
+        resize: vertical;
+
+    }
+
+
+    /* ===============================
+       BOTONES
+    =============================== */
+
+    button {
+
+        border: none;
+
+        padding: 13px 20px;
+
+        margin-top: 10px;
+
+        margin-right: 10px;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+    }
+
+
+    .guardar {
+
+        background: #1f6b3b;
+
+        color: white;
+
+    }
+
+
+    .excel {
+
+        background: #1565c0;
+
+        color: white;
+
+    }
+
+
+    .limpiar {
+
+        background: #777;
+
+        color: white;
+
+    }
+
+
+    button:hover {
+
+        opacity: 0.85;
+
+    }
+
+
+    /* ===============================
+       RESULTADO
+    =============================== */
+
+    .resultado {
+
+        display: none;
+
+    }
+
+
+    .documento {
+
+        background: #f5f9f5;
+
+        padding: 20px;
+
+        border-left:
+
+            5px solid #1f6b3b;
+
+        white-space: pre-line;
+
+        line-height: 1.7;
+
+    }
+
+
+    .mensaje {
+
+        display: none;
+
+        background: #d4edda;
+
+        color: #155724;
+
+        padding: 15px;
+
+        border-radius: 5px;
+
+        margin-top: 15px;
+
+    }
+
+
+    /* ===============================
+       TABLA
+    =============================== */
+
+    .tabla-contenedor {
+
+        overflow-x: auto;
+
+    }
+
+
+    table {
+
+        width: 100%;
+
+        border-collapse: collapse;
+
+        margin-top: 20px;
+
+    }
+
+
+    th,
+    td {
+
+        border: 1px solid #ccc;
+
+        padding: 10px;
+
+        text-align: left;
+
+    }
+
+
+    th {
+
+        background: #1f6b3b;
+
+        color: white;
+
+    }
+
+
+    /* ===============================
+       PIE DE PÁGINA
+    =============================== */
+
+    footer {
+
+        background: #1f6b3b;
+
+        color: white;
+
+        text-align: center;
+
+        padding: 25px;
+
+        margin-top: 40px;
+
+    }
+
+
+    /* ===============================
+       RESPONSIVE
+    =============================== */
+
+    @media (max-width: 600px) {
+
+        .contenedor {
+
+            width: 95%;
+
+        }
+
+
+        button {
+
+            width: 100%;
+
+            margin-right: 0;
+
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- ===============================
+     ENCABEZADO
+=============================== -->
+
+<header>
+
+    <h1>🌱 EcoRegión</h1>
+
+    <p>
+        Plataforma de apoyo para la gestión
+        y organización de información ambiental
+    </p>
+
+</header>
+
+
+
+<main class="contenedor">
+
+
+    <!-- ===============================
+         ¿QUÉ ES ECOREGIÓN?
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            ¿Qué es EcoRegión?
+        </h2>
+
+
+        <p>
+
+            EcoRegión es una aplicación web diseñada para apoyar
+            a personas, empresas y organizaciones que necesitan
+            organizar información relacionada con proyectos,
+            trámites y procesos ambientales.
+
+        </p>
+
+
+        <p>
+
+            La plataforma permite registrar la información de un
+            proyecto, identificar la entidad ambiental relacionada
+            con el trámite y organizar datos como la descripción
+            del proyecto, sus posibles impactos ambientales y las
+            medidas de manejo propuestas.
+
+        </p>
+
+
+        <div class="solucion">
+
+            <h3>
+                ¿Cómo ayuda EcoRegión?
+            </h3>
+
+
+            <p>
+
+                EcoRegión busca simplificar la recopilación y
+                organización de información necesaria para iniciar
+                procesos ambientales. La aplicación genera un
+                documento técnico preliminar y permite almacenar
+                los registros realizados por los usuarios.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===============================
+         ¿A QUIÉN AYUDA?
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            ¿A quién ayuda EcoRegión?
+        </h2>
+
+
+        <p>
+
+            EcoRegión está dirigida principalmente a personas,
+            emprendedores, empresas y organizaciones que desarrollan
+            proyectos y necesitan organizar información relacionada
+            con requisitos o trámites ambientales.
+
+        </p>
+
+
+        <ul>
+
+            <li>
+
+                Personas que necesitan iniciar un trámite ambiental.
+
+            </li>
+
+
+            <li>
+
+                Emprendedores que desarrollan proyectos con impacto
+                sobre el ambiente.
+
+            </li>
+
+
+            <li>
+
+                Empresas que necesitan organizar información
+                ambiental de sus proyectos.
+
+            </li>
+
+
+            <li>
+
+                Organizaciones que requieren estructurar información
+                técnica y ambiental.
+
+            </li>
+
+
+            <li>
+
+                Usuarios que necesitan identificar de manera inicial
+                la autoridad ambiental relacionada con su trámite.
+
+            </li>
+
+        </ul>
+
+    </section>
+
+
+
+    <!-- ===============================
+         PROBLEMA
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            Problema que busca resolver EcoRegión
+        </h2>
+
+
+        <div class="problema">
+
+            <p>
+
+                Los procesos relacionados con trámites ambientales
+                pueden requerir una gran cantidad de información,
+                documentos y requisitos técnicos. Muchas personas
+                pueden tener dificultades para identificar qué
+                información necesitan reunir o cómo organizarla
+                antes de iniciar un trámite ante la autoridad
+                ambiental competente.
+
+            </p>
+
+
+            <p>
+
+                Además, la recopilación manual de información puede
+                generar pérdida de tiempo, errores en los datos,
+                documentos incompletos y dependencia de una persona
+                encargada de organizar el proceso.
+
+            </p>
+
+        </div>
+
+
+        <div class="solucion">
+
+            <h3>
+                Solución propuesta
+            </h3>
+
+
+            <p>
+
+                EcoRegión propone centralizar la información en una
+                sola aplicación. El usuario registra los datos de su
+                proyecto y el sistema organiza la información para
+                generar un documento técnico preliminar.
+
+            </p>
+
+
+            <p>
+
+                De esta forma, se busca reducir procesos manuales,
+                facilitar la organización de los datos y ofrecer una
+                guía inicial sobre la información que puede ser
+                relevante para el trámite ambiental.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===============================
+         LINEAMIENTOS AMBIENTALES
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            Lineamientos ambientales considerados
+        </h2>
+
+
+        <p>
+
+            EcoRegión toma como referencia información y lineamientos
+            generales publicados por autoridades ambientales como la
+            Secretaría Distrital de Ambiente de Bogotá, la Corporación
+            Autónoma Regional de Cundinamarca y Corpoboyacá.
+
+        </p>
+
+
+        <!-- SDA -->
+
+        <div class="lineamientos">
+
+            <h3>
+                Secretaría Distrital de Ambiente (SDA)
+            </h3>
+
+
+            <p>
+
+                Para los proyectos ubicados en Bogotá, EcoRegión toma
+                como referencia los lineamientos relacionados con la
+                atención a la ciudadanía y la consulta de trámites
+                ambientales.
+
+            </p>
+
+
+            <ul>
+
+                <li>
+
+                    Facilitar el acceso y la organización de la
+                    información para los usuarios.
+
+                </li>
+
+
+                <li>
+
+                    Utilizar un lenguaje claro y comprensible.
+
+                </li>
+
+
+                <li>
+
+                    Orientar al usuario para identificar la información
+                    inicial relacionada con su trámite.
+
+                </li>
+
+
+                <li>
+
+                    Tener en cuenta que los trámites pueden incluir
+                    requisitos, pasos, costos, formatos y normativa
+                    aplicable definidos por la autoridad competente.
+
+                </li>
+
+
+                <li>
+
+                    Promover una atención organizada y orientada a las
+                    necesidades del ciudadano.
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- CAR -->
+
+        <div class="lineamientos">
+
+            <h3>
+                CAR Cundinamarca
+            </h3>
+
+
+            <p>
+
+                Para los territorios bajo competencia de la CAR
+                Cundinamarca, EcoRegión considera la importancia de
+                identificar el trámite ambiental correspondiente y
+                organizar previamente la información necesaria para
+                su gestión.
+
+            </p>
+
+
+            <ul>
+
+                <li>
+
+                    Identificación del proyecto y su ubicación.
+
+                </li>
+
+
+                <li>
+
+                    Identificación de la autoridad ambiental
+                    competente.
+
+                </li>
+
+
+                <li>
+
+                    Organización de la información relacionada con
+                    el trámite solicitado.
+
+                </li>
+
+
+                <li>
+
+                    Registro de información técnica y ambiental
+                    del proyecto.
+
+                </li>
+
+
+                <li>
+
+                    Consulta de los requisitos y procedimientos
+                    establecidos por la autoridad ambiental.
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- CORPOBOYACÁ -->
+
+        <div class="lineamientos">
+
+            <h3>
+                Corpoboyacá
+            </h3>
+
+
+            <p>
+
+                EcoRegión también toma como referencia procedimientos
+                ambientales específicos publicados por Corpoboyacá,
+                especialmente aquellos relacionados con el
+                aprovechamiento forestal de árboles aislados.
+
+            </p>
+
+
+            <ul>
+
+                <li>
+
+                    Identificación de las características del proyecto
+                    o actividad ambiental.
+
+                </li>
+
+
+                <li>
+
+                    Registro de la ubicación donde se realizará la
+                    actividad.
+
+                </li>
+
+
+                <li>
+
+                    Organización de la documentación requerida para
+                    el trámite.
+
+                </li>
+
+
+                <li>
+
+                    Identificación de posibles impactos ambientales.
+
+                </li>
+
+
+                <li>
+
+                    Propuesta de medidas de manejo, prevención o
+                    mitigación según las características del proyecto.
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="problema">
+
+            <h3>
+                Importante
+            </h3>
+
+
+            <p>
+
+                EcoRegión funciona como una herramienta de apoyo para
+                recopilar y organizar información. La aplicación no
+                reemplaza a la Secretaría Distrital de Ambiente, la
+                CAR, Corpoboyacá u otra autoridad ambiental competente,
+                ni aprueba, autoriza o expide permisos ambientales.
+
+            </p>
+
+
+            <p>
+
+                Los requisitos definitivos deben ser verificados
+                directamente con la autoridad ambiental competente,
+                debido a que pueden variar según la ubicación,
+                actividad y características de cada proyecto.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===============================
+         FORMULARIO
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            Registro del proyecto ambiental
+        </h2>
+
+
+        <p>
+
+            Complete la siguiente información para organizar los
+            datos principales de su proyecto.
+
+        </p>
+
+
+        <form id="formularioProyecto">
+
+
+            <div class="grupo">
+
+                <label>
+                    Nombre del proyecto
+                </label>
+
+
+                <input
+
+                    type="text"
+
+                    id="nombreProyecto"
+
+                    placeholder="Ingrese el nombre del proyecto"
+
+                    required
+
+                >
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Nombre del responsable
+                </label>
+
+
+                <input
+
+                    type="text"
+
+                    id="responsable"
+
+                    placeholder="Ingrese el nombre del responsable"
+
+                    required
+
+                >
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Ubicación del proyecto
+                </label>
+
+
+                <input
+
+                    type="text"
+
+                    id="ubicacion"
+
+                    placeholder="Ciudad, municipio o departamento"
+
+                    required
+
+                >
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Autoridad ambiental de referencia
+                </label>
+
+
+                <select
+
+                    id="entidad"
+
+                    required
+
+                >
+
+                    <option value="">
+                        Seleccione una opción
+                    </option>
+
+
+                    <option value="SDA">
+
+                        Secretaría Distrital de Ambiente - SDA
+
+                    </option>
+
+
+                    <option value="CAR Cundinamarca">
+
+                        CAR Cundinamarca
+
+                    </option>
+
+
+                    <option value="Corpoboyacá">
+
+                        Corpoboyacá
+
+                    </option>
+
+
+                    <option value="Otra autoridad ambiental">
+
+                        Otra autoridad ambiental
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Tipo de trámite o actividad ambiental
+                </label>
+
+
+                <select
+
+                    id="tramite"
+
+                    required
+
+                >
+
+                    <option value="">
+                        Seleccione una opción
+                    </option>
+
+
+                    <option value="Permiso ambiental">
+
+                        Permiso ambiental
+
+                    </option>
+
+
+                    <option value="Licencia ambiental">
+
+                        Licencia ambiental
+
+                    </option>
+
+
+                    <option value="Permiso de vertimientos">
+
+                        Permiso de vertimientos
+
+                    </option>
+
+
+                    <option value="Concesión de aguas">
+
+                        Concesión de aguas
+
+                    </option>
+
+
+                    <option value="Aprovechamiento forestal">
+
+                        Aprovechamiento forestal
+
+                    </option>
+
+
+                    <option value="Otro trámite">
+
+                        Otro trámite ambiental
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Descripción del proyecto
+                </label>
+
+
+                <textarea
+
+                    id="descripcion"
+
+                    placeholder="Describa las principales actividades del proyecto"
+
+                    required
+
+                ></textarea>
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Posibles impactos ambientales
+                </label>
+
+
+                <textarea
+
+                    id="impactos"
+
+                    placeholder="Ejemplo: generación de residuos, consumo de agua, emisiones o afectación de recursos naturales"
+
+                    required
+
+                ></textarea>
+
+            </div>
+
+
+
+            <div class="grupo">
+
+                <label>
+                    Medidas de manejo ambiental
+                </label>
+
+
+                <textarea
+
+                    id="medidas"
+
+                    placeholder="Ejemplo: reciclaje, manejo de residuos, prevención, mitigación o compensación"
+
+                    required
+
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- BOTONES -->
+
+
+            <button
+
+                type="submit"
+
+                class="guardar"
+
+            >
+
+                Guardar registro
+
+            </button>
+
+
+
+            <button
+
+                type="button"
+
+                class="excel"
+
+                onclick="generarExcel()"
+
+            >
+
+                Descargar registros en Excel
+
+            </button>
+
+
+
+            <button
+
+                type="reset"
+
+                class="limpiar"
+
+            >
+
+                Limpiar formulario
+
+            </button>
+
+
+        </form>
+
+
+
+        <div
+
+            class="mensaje"
+
+            id="mensaje"
+
+        >
+
+            Información guardada correctamente
+            en EcoRegión.
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ===============================
+         DOCUMENTO GENERADO
+    =============================== -->
+
+    <section
+
+        class="tarjeta resultado"
+
+        id="resultado"
+
+    >
+
+        <h2>
+            Documento técnico preliminar
+        </h2>
+
+
+        <div
+
+            class="documento"
+
+            id="documentoGenerado"
+
+        >
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===============================
+         REGISTROS
+    =============================== -->
+
+    <section class="tarjeta">
+
+        <h2>
+            Registros almacenados
+        </h2>
+
+
+        <p>
+
+            Los registros se almacenan temporalmente en el navegador
+            mediante el almacenamiento local de la aplicación.
+
+        </p>
+
+
+        <div class="tabla-contenedor">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Fecha
+                        </th>
+
+
+                        <th>
+                            Proyecto
+                        </th>
+
+
+                        <th>
+                            Responsable
+                        </th>
+
+
+                        <th>
+                            Ubicación
+                        </th>
+
+
+                        <th>
+                            Autoridad
+                        </th>
+
+
+                        <th>
+                            Trámite
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody
+
+                    id="cuerpoTabla"
+
+                >
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ===============================
+     PIE DE PÁGINA
+=============================== -->
+
+<footer>
+
+    <p>
+
+        🌱 EcoRegión © 2026
+
+    </p>
+
+
+    <p>
+
+        Herramienta de apoyo para la organización
+        de información ambiental.
+
+    </p>
+
+</footer>
+
+
+
+<!-- ===============================
+     JAVASCRIPT
+=============================== -->
+
+<script>
+
+
+    // ==========================================
+    // CARGAR REGISTROS GUARDADOS
+    // ==========================================
+
+
+    let registros = JSON.parse(
+
+        localStorage.getItem(
+            "registrosEcoRegion"
+        )
+
+    ) || [];
+
+
+
+    // MOSTRAR REGISTROS AL ABRIR
+
+
+    mostrarRegistros();
+
+
+
+
+    // ==========================================
+    // GUARDAR INFORMACIÓN DEL FORMULARIO
+    // ==========================================
+
+
+    document
+
+        .getElementById(
+            "formularioProyecto"
+        )
+
+        .addEventListener(
+
+            "submit",
+
+            function(event) {
+
+
+                event.preventDefault();
+
+
+
+                // CREAR OBJETO
+
+
+                const datos = {
+
+
+                    fecha:
+
+                        new Date()
+                        .toLocaleString(),
+
+
+
+                    nombreProyecto:
+
+                        document
+
+                            .getElementById(
+                                "nombreProyecto"
+                            )
+
+                            .value,
+
+
+
+                    responsable:
+
+                        document
+
+                            .getElementById(
+                                "responsable"
+                            )
+
+                            .value,
+
+
+
+                    ubicacion:
+
+                        document
+
+                            .getElementById(
+                                "ubicacion"
+                            )
+
+                            .value,
+
+
+
+                    entidad:
+
+                        document
+
+                            .getElementById(
+                                "entidad"
+                            )
+
+                            .value,
+
+
+
+                    tramite:
+
+                        document
+
+                            .getElementById(
+                                "tramite"
+                            )
+
+                            .value,
+
+
+
+                    descripcion:
+
+                        document
+
+                            .getElementById(
+                                "descripcion"
+                            )
+
+                            .value,
+
+
+
+                    impactos:
+
+                        document
+
+                            .getElementById(
+                                "impactos"
+                            )
+
+                            .value,
+
+
+
+                    medidas:
+
+                        document
+
+                            .getElementById(
+                                "medidas"
+                            )
+
+                            .value
+
+                };
+
+
+
+                // AGREGAR EL NUEVO REGISTRO
+
+
+                registros.push(
+                    datos
+                );
+
+
+
+                // GUARDAR EN LOCALSTORAGE
+
+
+                localStorage.setItem(
+
+                    "registrosEcoRegion",
+
+                    JSON.stringify(
+                        registros
+                    )
+
+                );
+
+
+
+                // MOSTRAR MENSAJE
+
+
+                document
+
+                    .getElementById(
+                        "mensaje"
+                    )
+
+                    .style.display =
+                        "block";
+
+
+
+                // ACTUALIZAR TABLA
+
+
+                mostrarRegistros();
+
+
+
+                // GENERAR DOCUMENTO
+
+
+                generarDocumento(
+                    datos
+                );
+
+
+
+                // LIMPIAR FORMULARIO
+
+
+                document
+
+                    .getElementById(
+                        "formularioProyecto"
+                    )
+
+                    .reset();
+
+
+            }
+
+        );
+
+
+
+
+    // ==========================================
+    // MOSTRAR REGISTROS
+    // ==========================================
+
+
+    function mostrarRegistros() {
+
+
+        const cuerpo =
+
+            document
+
+                .getElementById(
+                    "cuerpoTabla"
+                );
+
+
+
+        cuerpo.innerHTML = "";
+
+
+
+        registros.forEach(
+
+            function(registro) {
+
+
+                const fila =
+
+                    document
+
+                        .createElement(
+                            "tr"
+                        );
+
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${registro.fecha}
+                    </td>
+
+                    <td>
+                        ${registro.nombreProyecto}
+                    </td>
+
+                    <td>
+                        ${registro.responsable}
+                    </td>
+
+                    <td>
+                        ${registro.ubicacion}
+                    </td>
+
+                    <td>
+                        ${registro.entidad}
+                    </td>
+
+                    <td>
+                        ${registro.tramite}
+                    </td>
+
+                `;
+
+
+
+                cuerpo.appendChild(
+                    fila
+                );
+
+
+            }
+
+        );
+
+    }
+
+
+
+
+    // ==========================================
+    // GENERAR DOCUMENTO TÉCNICO
+    // ==========================================
+
+
+    function generarDocumento(
+        datos
+    ) {
+
+
+        const documento =
+```
+
+`DOCUMENTO TÉCNICO PRELIMINAR
+
+PLATAFORMA:
+
+EcoRegión
+
+FECHA DE REGISTRO:
+
+${datos.fecha}
+
+PROYECTO:
+
+${datos.nombreProyecto}
+
+RESPONSABLE:
+
+${datos.responsable}
+
+UBICACIÓN:
+
+${datos.ubicacion}
+
+AUTORIDAD AMBIENTAL DE REFERENCIA:
+
+${datos.entidad}
+
+TIPO DE TRÁMITE O ACTIVIDAD:
+
+${datos.tramite}
+
+1. DESCRIPCIÓN DEL PROYECTO
+
+${datos.descripcion}
+
+2. POSIBLES IMPACTOS AMBIENTALES
+
+${datos.impactos}
+
+3. MEDIDAS DE MANEJO AMBIENTAL
+
+${datos.medidas}
+
+4. ORGANIZACIÓN DE LA INFORMACIÓN
+
+EcoRegión organiza la información suministrada
+por el usuario como apoyo para la preparación
+inicial de documentos relacionados con procesos
+y trámites ambientales.
+
+5. CONSIDERACIONES AMBIENTALES
+
+La información registrada debe ser revisada de
+acuerdo con los requisitos específicos establecidos
+por la autoridad ambiental competente.
+
+Los requisitos pueden variar según:
+
+• La ubicación del proyecto.
+
+• El tipo de actividad desarrollada.
+
+• Los recursos naturales involucrados.
+
+• Los impactos ambientales identificados.
+
+• La autoridad ambiental competente.
+
+6. MARCO GENERAL DE REFERENCIA
+
+• Ley 99 de 1993.
+
+• Decreto 1076 de 2015.
+
+• Requisitos establecidos por la autoridad
+ambiental competente.
+
+• Lineamientos y procedimientos publicados por
+entidades como la SDA, CAR Cundinamarca
+y Corpoboyacá.
+
+IMPORTANTE
+
+Este documento es una herramienta preliminar
+de organización de información.
+
+EcoRegión no reemplaza a las autoridades
+ambientales y no aprueba ni expide permisos,
+licencias o autorizaciones ambientales.
+
+DOCUMENTO GENERADO POR:
+
+ECOREGIÓN
+
+Año 2026
+`;
+
+```
+        document
+
+            .getElementById(
+                "documentoGenerado"
+            )
+
+            .textContent =
+                documento;
+
+
+
+        document
+
+            .getElementById(
+                "resultado"
+            )
+
+            .style.display =
+                "block";
+
+
+
+        document
+
+            .getElementById(
+                "resultado"
+            )
+
+            .scrollIntoView({
+
+                behavior:
+                    "smooth"
+
+            });
+
+
+    }
+
+
+
+
+    // ==========================================
+    // GENERAR ARCHIVO EXCEL
+    // ==========================================
+
+
+    function generarExcel() {
+
+
+        if (
+
+            registros.length === 0
+
+        ) {
+
+
+            alert(
+
+                "No existen registros para exportar."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        // CREAR HOJA DE EXCEL
+
+
+        const hoja =
+
+            XLSX.utils.json_to_sheet(
+                registros
+            );
+
+
+
+        // CREAR LIBRO
+
+
+        const libro =
+
+            XLSX.utils.book_new();
+
+
+
+        // AGREGAR HOJA
+
+
+        XLSX.utils.book_append_sheet(
+
+            libro,
+
+            hoja,
+
+            "Registros EcoRegion"
+
+        );
+
+
+
+        // DESCARGAR ARCHIVO
+
+
+        XLSX.writeFile(
+
+            libro,
+
+            "registros_ecoregion.xlsx"
+
+        );
+
+
+    }
+
+
+</script>
+```
+
+</body>
+
+</html>
